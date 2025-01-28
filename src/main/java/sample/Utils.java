@@ -1,4 +1,4 @@
-package com.example.dependecypackage;
+package sample;
 
 public class Utils {
     /**

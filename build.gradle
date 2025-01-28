@@ -1,12 +1,12 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.4.2'
+	id 'org.springframework.boot' version '3.4.2' apply false
 	id 'io.spring.dependency-management' version '1.1.7'
 	id("maven-publish")
 }
 
 group = 'com.example'
-version = '0.0.1-SNAPSHOT'
+version = '1.0.0'
 
 java {
 	toolchain {
@@ -18,11 +18,17 @@ repositories {
 	mavenCentral()
 }
 
+dependencyManagement {
+	imports {
+		mavenBom org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES
+	}
+}
+
 publishing {
 	repositories {
 		maven {
 			name = "GitHubPackages"
-			url = uri("https://github.com/SatishGuthula/sample")
+			url = uri("https://maven.pkg.github.com/SatishGuthula/sample")
 			credentials {
 				username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
 				password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
@@ -37,14 +43,16 @@ publishing {
 }
 
 
-bootJar {
-	enabled = false
-}
-
 dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter'
+	implementation 'org.springframework.boot:spring-boot-starter:3.4.2'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.apache.kafka:kafka-streams'
+	implementation 'org.springframework.kafka:spring-kafka'
+	testImplementation 'org.springframework.kafka:spring-kafka-test'
 }
 
 tasks.named('test') {
